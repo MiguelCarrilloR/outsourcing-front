@@ -12,6 +12,7 @@ import {
   Users,
   Award
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const StrategyMain = () => {
   const [activeStep, setActiveStep] = useState(null);
@@ -67,17 +68,19 @@ const StrategyMain = () => {
       title: 'DIRECCIONAMIENTO ESTRATÉGICO',
       icon: ShoppingCart,
       color: 'bg-red-600',
-      description: 'Definición de la dirección estratégica organizacional'
+      description: 'Definición de la dirección estratégica organizacional',
+      path: '/estrategico/direccionamiento'       // <-- NUEVO
     },
     {
       id: 'implementacion',
       title: 'GESTIÓN DE INNOVACIÓN',
       icon: Settings,
       color: 'bg-gray-700',
-      description: 'Desarrollo e implementación de procesos innovadores'
+      description: 'Desarrollo e implementación de procesos innovadores',
+      path: '/estrategico/innovacion' // <-- NUEVO
     }
-
   ];
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -110,70 +113,86 @@ const StrategyMain = () => {
               const isActive = activeProcess === process.id;
 
               return (
-                <div
+                <Link
                   key={process.id}
-                  className={`
-                    relative overflow-hidden rounded-2xl cursor-pointer
-                    transition-all duration-500 transform hover:scale-105
-                    ${isActive ? 'shadow-2xl' : 'shadow-lg hover:shadow-xl'}
-                  `}
-                  style={{
-                    animation: `slideInLeft 0.6s ease-out ${index * 0.2}s both`
-                  }}
+                  to={process.path}                 // <-- navega a la ruta del proceso
+                  className="block"                 // mantiene el bloque clickeable
                   onMouseEnter={() => setActiveProcess(process.id)}
                   onMouseLeave={() => setActiveProcess(null)}
+                  style={{ animation: `slideInLeft 0.6s ease-out ${index * 0.2}s both` }}
                 >
-                  <div className={`
-                    ${process.color} p-6 text-white relative
-                    ${isActive ? 'bg-opacity-90' : 'bg-opacity-100'}
-                    transition-all duration-300
-                  `}>
-                    {/* Efecto de brillo animado */}
-                    <div className={`
-                      absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent
-                      transform -skew-x-12 transition-transform duration-1000
-                      ${isActive ? 'translate-x-full' : '-translate-x-full'}
-                      opacity-10
-                    `}></div>
+                  <div
+                    className={`
+            relative overflow-hidden rounded-2xl cursor-pointer
+            transition-all duration-500 transform hover:scale-105
+            ${isActive ? 'shadow-2xl' : 'shadow-lg hover:shadow-xl'}
+          `}
+                  >
+                    <div
+                      className={`
+              ${process.color} p-6 text-white relative
+              ${isActive ? 'bg-opacity-90' : 'bg-opacity-100'}
+              transition-all duration-300
+            `}
+                    >
+                      {/* Efecto de brillo animado */}
+                      <div
+                        className={`
+                absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent
+                transform -skew-x-12 transition-transform duration-1000
+                ${isActive ? 'translate-x-full' : '-translate-x-full'}
+                opacity-10
+              `}
+                      />
 
-                    <div className="flex items-center space-x-4 relative z-10">
-                      <div className={`
-                        p-4 rounded-full bg-white bg-opacity-20
-                        ${isActive ? 'animate-pulse' : ''}
-                        transition-transform duration-300
-                        ${isActive ? 'scale-110 rotate-12' : 'scale-100'}
-                      `}>
-                        <Icon className="w-8 h-8" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold mb-1">{process.title}</h3>
-                        <div className={`
-                          overflow-hidden transition-all duration-500
-                          ${isActive ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}
-                        `}>
-                          <p className="text-white text-opacity-90 text-sm leading-relaxed">
-                            {process.description}
-                          </p>
+                      <div className="flex items-center space-x-4 relative z-10">
+                        <div
+                          className={`
+                  p-4 rounded-full bg-white bg-opacity-20
+                  ${isActive ? 'animate-pulse' : ''}
+                  transition-transform duration-300
+                  ${isActive ? 'scale-110 rotate-12' : 'scale-100'}
+                `}
+                        >
+                          <Icon className="w-8 h-8" />
                         </div>
+
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold mb-1">{process.title}</h3>
+                          <div
+                            className={`
+                    overflow-hidden transition-all duration-500
+                    ${isActive ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}
+                  `}
+                          >
+                            <p className="text-white text-opacity-90 text-sm leading-relaxed">
+                              {process.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Indicador de hover */}
+                        <div
+                          className={`
+                  w-2 h-12 bg-white bg-opacity-30 rounded-full
+                  transition-all duration-300
+                  ${isActive ? 'scale-y-150 opacity-100' : 'scale-y-100 opacity-60'}
+                `}
+                        />
                       </div>
 
-                      {/* Indicador de hover */}
-                      <div className={`
-                        w-2 h-12 bg-white bg-opacity-30 rounded-full
-                        transition-all duration-300
-                        ${isActive ? 'scale-y-150 opacity-100' : 'scale-y-100 opacity-60'}
-                      `}></div>
-                    </div>
-
-                    {/* Líneas decorativas */}
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-white bg-opacity-20">
-                      <div className={`
-                        h-full bg-white transition-all duration-700
-                        ${isActive ? 'w-full' : 'w-0'}
-                      `}></div>
+                      {/* Líneas decorativas */}
+                      <div className="absolute bottom-0 left-0 w-full h-1 bg-white bg-opacity-20">
+                        <div
+                          className={`
+                  h-full bg-white transition-all duration-700
+                  ${isActive ? 'w-full' : 'w-0'}
+                `}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
 
@@ -184,17 +203,17 @@ const StrategyMain = () => {
                   <div
                     key={index}
                     className={`
-                      w-3 h-3 rounded-full transition-all duration-300
-                      ${activeProcess === processes[index].id
+            w-3 h-3 rounded-full transition-all duration-300
+            ${activeProcess === processes[index].id
                         ? 'bg-red-600 scale-125'
-                        : 'bg-gray-300 hover:bg-red-300'
-                      }
-                    `}
+                        : 'bg-gray-300 hover:bg-red-300'}
+          `}
                   />
                 ))}
               </div>
             </div>
           </div>
+
 
           {/* Right Side - Strategic Process Steps */}
           <div className="relative">

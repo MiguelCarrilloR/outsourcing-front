@@ -1,7 +1,6 @@
 import React from 'react';
-import { RouterProvider } from 'react-router-dom';
-import { createBrowserRouter } from 'react-router-dom';
-import './App.css'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import './App.css';
 
 import HomePage from './pages/HomePage';
 import StrategyPage from './pages/StrategyPage';
@@ -18,23 +17,39 @@ import AdminSuppPage from './pages/AdminSuppPage';
 import HumaPage from './pages/HumaPage';
 import CxPage from './pages/CxPage';
 import ImporvePage from './pages/ImporvePage';
+import SagrilaftPage from './pages/SagrilaftPage';
+import TransparencyPage from './pages/TransparencyPage';
+import LoginPage from './pages/LoginPage';
+import LogoutPage from './utils/LogoutPage';
+import DataPage from './pages/DataPage';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import AccountsPage from './pages/AccountsPage';
 
 const routes = [
-  { path: '/', element: <HomePage /> },
-  {path: "/estrategico/inicio", element: <StrategyPage/>},
-  {path: "/estrategico/innovacion", element: <InovationPage/>},
-  {path: "/misional/inicio" , element: <MisionalPage/>},
-  {path: "/misional/comercial", element: <GestionPage/>},
-  {path: "/misional/implementacion", element: <ImplementacionPage/>},
-  {path: "/misional/operaciones", element: <OperationPage/>},
-  {path: "/soporte/inicio", element: <SupportPage/>},
-  {path: "/soporte/tecnologia", element: <TechPage/>},
-  {path: "/soporte/transformacion", element: <TransformationPage/>},
-  {path: "/soporte/administrativa", element: <AdminSuppPage/>},
-  {path: "/soporte/humana", element: <HumaPage/>},
-  {path: "/soporte/cx", element: <CxPage/>},
-  {path: "/soporte/mejora", element: <ImporvePage/>},
-  {path: "/estrategico/direccionamiento", element: <DirectionPage/>}
+  // Login público
+  { path: '/', element: <LoginPage /> },
+
+  // Todo lo demás protegido
+  { path: '/home', element: <ProtectedRoute><HomePage /></ProtectedRoute> },
+  { path: '/estrategico/inicio', element: <ProtectedRoute><StrategyPage/></ProtectedRoute> },
+  { path: '/estrategico/innovacion', element: <ProtectedRoute><InovationPage/></ProtectedRoute> },
+  { path: '/misional/inicio', element: <ProtectedRoute><MisionalPage/></ProtectedRoute> },
+  { path: '/misional/comercial', element: <ProtectedRoute><GestionPage/></ProtectedRoute> },
+  { path: '/misional/implementacion', element: <ProtectedRoute><ImplementacionPage/></ProtectedRoute> },
+  { path: '/misional/operaciones', element: <ProtectedRoute><OperationPage/></ProtectedRoute> },
+  { path: '/soporte/inicio', element: <ProtectedRoute><SupportPage/></ProtectedRoute> },
+  { path: '/soporte/tecnologia', element: <ProtectedRoute><TechPage/></ProtectedRoute> },
+  { path: '/soporte/transformacion', element: <ProtectedRoute><TransformationPage/></ProtectedRoute> },
+  { path: '/soporte/administrativa', element: <ProtectedRoute><AdminSuppPage/></ProtectedRoute> },
+  { path: '/soporte/humana', element: <ProtectedRoute><HumaPage/></ProtectedRoute> },
+  { path: '/soporte/cx', element: <ProtectedRoute><CxPage/></ProtectedRoute> },
+  { path: '/soporte/mejora', element: <ProtectedRoute><ImporvePage/></ProtectedRoute> },
+  { path: '/estrategico/direccionamiento', element: <ProtectedRoute><DirectionPage/></ProtectedRoute> },
+  { path: '/sagrilaft', element: <ProtectedRoute><SagrilaftPage/></ProtectedRoute> },
+  { path: '/transparencia', element: <ProtectedRoute><TransparencyPage/></ProtectedRoute> },
+  {path: "/proteccion-datos", element: <ProtectedRoute><DataPage/></ProtectedRoute>},
+  {path:"/cuentas", element: <ProtectedRoute><AccountsPage/></ProtectedRoute>},
+  { path: '/logout', element: <LogoutPage /> }
 ];
 
 const router = createBrowserRouter(routes);
@@ -43,4 +58,4 @@ function App() {
   return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;

@@ -9,7 +9,10 @@ import {
   ChevronDown, 
   ChevronRight,
   Menu,
-  X
+  X,
+  Settings,
+  TrendingUp,
+  LogOut
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -26,70 +29,104 @@ const Sidebar = () => {
 
   const menuItems = [
     {
-      key: 'inicio',
-      label: 'INICIO',
-      icon: Home,
-      path: '/', 
-      hasSubmenu: false
-    },
-    {
-      key: 'macroproceso-estrategico',
-      label: 'MACROPROCESO ESTRATÉGICO',
-      icon: Target,
-      hasSubmenu: true,
-      submenu: [
-        { label: 'Inicio', path: '/estrategico/inicio' },
-        { label: 'Direccionamiento Estratégico', path: '/estrategico/direccionamiento' },
-        { label: 'Gestión de Innovación', path: '/estrategico/innovacion' }
+      section: 'GENERAL',
+      items: [
+        {
+          key: 'inicio',
+          label: 'INICIO',
+          icon: Home,
+          path: '/home', 
+          hasSubmenu: false
+        }
       ]
     },
     {
-      key: 'macroproceso-misional',
-      label: 'MACROPROCESO MISIONAL',
-      icon: BookOpen,
-      hasSubmenu: true,
-      submenu: [
-        { label: 'Inicio', path: '/misional/inicio' },
-        { label: 'Gestión Comercial', path: '/misional/comercial' },
-        { label: 'Implementación', path: '/misional/implementacion' },
-        { label: 'Operaciones', path: '/misional/operaciones' }
+      section: 'MACROPROCESOS',
+      items: [
+        {
+          key: 'macroproceso-estrategico',
+          label: 'ESTRATÉGICO',
+          icon: Target,
+          hasSubmenu: true,
+          submenu: [
+            { label: 'Inicio', path: '/estrategico/inicio' },
+            { label: 'Direccionamiento Estratégico', path: '/estrategico/direccionamiento' },
+            { label: 'Gestión de Innovación', path: '/estrategico/innovacion' }
+          ]
+        },
+        {
+          key: 'macroproceso-misional',
+          label: 'MISIONAL',
+          icon: BookOpen,
+          hasSubmenu: true,
+          submenu: [
+            { label: 'Inicio', path: '/misional/inicio' },
+            { label: 'Gestión Comercial', path: '/misional/comercial' },
+            { label: 'Implementación', path: '/misional/implementacion' },
+            { label: 'Operaciones', path: '/misional/operaciones' }
+          ]
+        },
+        {
+          key: 'macroproceso-soporte',
+          label: 'SOPORTE',
+          icon: Users,
+          hasSubmenu: true,
+          submenu: [
+            { label: 'Inicio', path: '/soporte/inicio' },
+            { label: 'Tecnología', path: '/soporte/tecnologia' },
+            { label: 'Transformación Digital', path: '/soporte/transformacion' },
+            { label: 'Gestión Administrativa y Financiera', path: '/soporte/administrativa' },
+            { label: 'Gestión Humana', path: '/soporte/humana' },
+            { label: 'Valoración de la experiencia y calidad CX', path: '/soporte/cx' },
+            { label: 'Mejora Continua', path: '/soporte/mejora' }
+          ]
+        }
       ]
     },
     {
-      key: 'macroproceso-soporte',
-      label: 'MACROPROCESO SOPORTE',
-      icon: Users,
-      hasSubmenu: true,
-      submenu: [
-        { label: 'Inicio', path: '/soporte/inicio' },
-        { label: 'Tecnología', path: '/soporte/tecnologia' },
-        { label: 'Transformación Digital', path: '/soporte/transformacion' },
-        { label: 'Gestión Administrativa y Financiera', path: '/soporte/administrativa' },
-        { label: 'Gestión Humana', path: '/soporte/humana' },
-        { label: 'Valoración de la experiencia y calidad CX', path: '/soporte/cx' },
-        { label: 'Mejora Continua', path: '/soporte/mejora' }
+      section: 'PROGRAMAS',
+      items: [
+        {
+          key: 'programa-sagrilaft',
+          label: 'SAGRILAFT',
+          icon: FileText,
+          path: '/sagrilaft',
+          hasSubmenu: false
+        },
+        {
+          key: 'transparencia-etica',
+          label: 'TRANSPARENCIA Y ÉTICA EMPRESARIAL',
+          icon: Shield,
+          path: '/transparencia',
+          hasSubmenu: false
+        },
+        {
+          key: 'programa-proteccion-datos',
+          label: 'PROTECCIÓN DE DATOS PERSONALES',
+          icon: FileText,
+          path: '/proteccion-datos',
+          hasSubmenu: false
+        }
       ]
     },
     {
-      key: 'programa-sagrilaft',
-      label: 'PROGRAMA SAGRILAFT',
-      icon: FileText,
-      path: '/sagrilaft',
-      hasSubmenu: false
-    },
-    {
-      key: 'transparencia-etica',
-      label: 'PROGRAMA DE TRANSPARENCIA Y ÉTICA EMPRESARIAL',
-      icon: Shield,
-      path: '/transparencia',
-      hasSubmenu: false
-    },
-    {
-      key: 'programa-proteccion-datos',
-      label: 'PROGRAMA PROTECCIÓN DE DATOS PERSONALES',
-      icon: FileText,
-      path: '/proteccion-datos',
-      hasSubmenu: false
+      section: 'ADMINISTRADOR',
+      items: [
+        {
+          key: 'accounts',
+          label: 'CUENTAS',
+          icon: FileText,
+          path: '/cuentas',
+          hasSubmenu: false
+        },
+        {
+          key: 'cerrar-sesion',
+          label: 'CERRAR SESIÓN',
+          icon: LogOut,
+          path: '/logout',
+          hasSubmenu: false
+        }
+      ]
     }
   ];
 
@@ -109,104 +146,94 @@ const Sidebar = () => {
         fixed md:relative
         left-0 top-0 h-full md:h-auto
         bg-white shadow-lg transition-transform duration-300
-        w-80 border-r border-gray-200
+        w-64 border-r border-gray-200
         z-40 md:z-auto
         flex flex-col
       `}>
         {/* Header */}
-        <div className="bg-red-600 text-white p-6">
-          <div className="flex items-center space-x-3">
-            {/* Logo placeholder */}
-            <div className="w-10 h-10 flex items-center justify-center">
-              <img 
-                src="https://i.imgur.com/KKobDma.png" 
-                alt="Logo Outsourcing" 
-                className="w-10 h-10 object-contain"
-              />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold">Outsourcing</h1>
-              <p className="text-sm opacity-90">"Mejorar vidas, nuestro compromiso"</p>
-            </div>
-          </div>
-          <div className="mt-4">
-            <h2 className="text-base font-semibold">RepositoriOS</h2>
-          </div>
+        <div className="bg-white p-4 border-b border-gray-200">
+          <h1 className="text-xl font-bold text-gray-800">Repositorio</h1>
         </div>
 
         {/* Navigation Menu */}
-        <nav className="flex-1 overflow-y-auto">
-          <ul className="py-4">
-            {menuItems.map((item) => (
-              <li key={item.key} className="mb-1">
-                {/* Item principal */}
-                {item.hasSubmenu ? (
-                  <div
-                    className={`
-                      flex items-center justify-between px-6 py-3 cursor-pointer
-                      hover:bg-red-50 transition-colors group
-                      ${expandedItems[item.key] ? 'bg-red-50' : ''}
-                    `}
-                    onClick={() => toggleExpanded(item.key)}
-                  >
-                    <div className="flex items-center space-x-3 flex-1">
-                      <item.icon 
-                        className="text-red-600 group-hover:text-red-700" 
-                        size={20} 
-                      />
-                      <span className="text-gray-800 text-sm font-medium group-hover:text-red-700">
-                        {item.label}
-                      </span>
-                    </div>
-                    <div className="text-red-600 group-hover:text-red-700">
-                      {expandedItems[item.key] ? 
-                        <ChevronDown size={16} /> : 
-                        <ChevronRight size={16} />
-                      }
-                    </div>
-                  </div>
-                ) : (
-                  <Link
-                    to={item.path}
-                    className="flex items-center px-6 py-3 hover:bg-red-50 transition-colors group"
-                  >
-                    <item.icon className="text-red-600 group-hover:text-red-700" size={20} />
-                    <span className="ml-3 text-gray-800 text-sm font-medium group-hover:text-red-700">
-                      {item.label}
-                    </span>
-                  </Link>
-                )}
+        <nav className="flex-1 overflow-y-auto py-2">
+          {menuItems.map((section, sectionIndex) => (
+            <div key={sectionIndex} className="mb-4">
+              {/* Section Header */}
+              <div className="px-4 py-2">
+                <h2 className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  {section.section}
+                </h2>
+              </div>
 
-                {/* Submenu */}
-                {item.hasSubmenu && expandedItems[item.key] && (
-                  <ul className="bg-gray-50 border-l-2 border-red-200 ml-6">
-                    {item.submenu.map((submenuItem, index) => (
-                      <li key={index}>
-                        <Link
-                          to={submenuItem.path}
-                          className="flex items-center px-6 py-2 hover:bg-red-50 transition-colors group"
+              {/* Section Items */}
+              <ul>
+                {section.items.map((item) => (
+                  <li key={item.key}>
+                    {/* Item principal */}
+                    {item.hasSubmenu ? (
+                      <>
+                        <div
+                          className={`
+                            flex items-center justify-between px-4 py-2 cursor-pointer
+                            transition-colors
+                            ${expandedItems[item.key] 
+                              ? 'bg-red-600 text-white' 
+                              : 'hover:bg-gray-100 text-gray-700'
+                            }
+                          `}
+                          onClick={() => toggleExpanded(item.key)}
                         >
-                          <span className="text-gray-700 text-sm group-hover:text-red-600 ml-6">
-                            {submenuItem.label}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
+                          <div className="flex items-center space-x-3">
+                            <item.icon size={18} />
+                            <span className="text-sm font-semibold uppercase">
+                              {item.label}
+                            </span>
+                          </div>
+                          <div>
+                            {expandedItems[item.key] ? 
+                              <ChevronDown size={16} /> : 
+                              <ChevronRight size={16} />
+                            }
+                          </div>
+                        </div>
 
-        {/* Footer */}
-        <div className="border-t border-gray-200 p-4">
-          <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <Users size={16} className="text-red-600" />
-            <span>Grupo público</span>
-            <span className="ml-auto">2 miembros</span>
-          </div>
-        </div>
+                        {/* Submenu */}
+                        {expandedItems[item.key] && (
+                          <ul className="bg-gray-50">
+                            {item.submenu.map((submenuItem, index) => (
+                              <li key={index}>
+                                <Link
+                                  to={submenuItem.path}
+                                  className="flex items-center px-12 py-2 hover:bg-gray-100 transition-colors text-gray-700 text-sm"
+                                >
+                                  {submenuItem.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </>
+                    ) : (
+                      <Link
+                        to={item.path}
+                        className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 transition-colors text-gray-700 group"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <item.icon size={18} />
+                          <span className="text-sm font-semibold uppercase">
+                            {item.label}
+                          </span>
+                        </div>
+                        <ChevronRight size={16} className="text-gray-400" />
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
       </div>
 
       {/* Overlay for mobile */}

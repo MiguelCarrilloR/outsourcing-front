@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, Map, Settings, BookOpen } from 'lucide-react';
-
-
+import { FileText, Map, Settings, BookOpen, Search, Filter, X } from 'lucide-react';
 import ProcesosGeneralSection from './sections/ProcesosGeneralSection';
 import MapaProcesosSection from './sections/MapaProcesosSection';
 import ISO9001Section from './sections/ISO9001Section';
@@ -9,6 +7,32 @@ import ISO27001Section from './sections/ISO27001Section';
 
 const Main = () => {
   const [activeSection, setActiveSection] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedProceso, setSelectedProceso] = useState('');
+  const [selectedSubproceso, setSelectedSubproceso] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Estructura de procesos basada en el mapa
+  const procesosData = {
+    'Estratégicos': [
+      'Direccionamiento Estratégico',
+      'Gestión de Innovación'
+    ],
+    'Misionales': [
+      'Gestión Comercial',
+      'Implementación',
+      'Operaciones',
+      'Transformación Digital',
+      'Gestión Humana'
+    ],
+    'Soporte': [
+      'Tecnología',
+      'Gestión Administrativa',
+      'Valoración de la Experiencia',
+      'Mejora Continua',
+      'Mercadeo'
+    ]
+  };
 
   const sections = [
     {
@@ -45,15 +69,70 @@ const Main = () => {
     }
   ];
 
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setSelectedProceso('');
+    setSelectedSubproceso('');
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Sistema Integrado de Gestión</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Explore nuestras diferentes áreas de procesos a través de una experiencia interactiva
           </p>
+        </div>
+
+        {/* Search and Filter Bar */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          {/* Search Bar */}
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Buscar procesos, subprocesos o contenido..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
+            />
+          </div>
+
+         
+          
+
+          {/* Active Filters Display */}
+          {(selectedProceso || selectedSubproceso) && !showFilters && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {selectedProceso && (
+                <span className="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">
+                  {selectedProceso}
+                  <button
+                    onClick={() => {
+                      setSelectedProceso('');
+                      setSelectedSubproceso('');
+                    }}
+                    className="ml-2 hover:text-red-900"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
+              {selectedSubproceso && (
+                <span className="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm">
+                  {selectedSubproceso}
+                  <button
+                    onClick={() => setSelectedSubproceso('')}
+                    className="ml-2 hover:text-red-900"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Section Navigation */}
@@ -88,7 +167,12 @@ const Main = () => {
                   activeSection === sectionIndex ? 'block' : 'hidden'
                 }`}
               >
-                <SectionComponent section={section} />
+                <SectionComponent 
+                  section={section}
+                  searchTerm={searchTerm}
+                  selectedProceso={selectedProceso}
+                  selectedSubproceso={selectedSubproceso}
+                />
               </div>
             );
           })}

@@ -5,6 +5,7 @@ import {
   Cog
 } from 'lucide-react';
 import imagen from '../../assets/macroprocmis.png'; 
+import { Link } from 'react-router-dom';
 
 const MisionalMain = () => {
   const [activeProcess, setActiveProcess] = useState(null);
@@ -15,21 +16,24 @@ const MisionalMain = () => {
       title: 'GESTIÓN COMERCIAL',
       icon: ShoppingCart,
       color: 'bg-red-600',
-      description: 'Identificación y gestión de oportunidades comerciales'
+      description: 'Identificación y gestión de oportunidades comerciales',
+      path: '/misional/comercial' // <-- NUEVO
     },
     {
       id: 'implementacion',
       title: 'IMPLEMENTACIÓN',
       icon: Settings,
       color: 'bg-gray-700',
-      description: 'Puesta en marcha de estrategias y soluciones'
+      description: 'Puesta en marcha de estrategias y soluciones',
+      path: '/misional/implementacion' // <-- NUEVO
     },
     {
       id: 'operaciones',
       title: 'OPERACIONES',
       icon: Cog,
       color: 'bg-red-600',
-      description: 'Ejecución y monitoreo de procesos operativos'
+      description: 'Ejecución y monitoreo de procesos operativos',
+      path: '/misional/operaciones' // <-- NUEVO
     }
   ];
 
@@ -65,6 +69,14 @@ const MisionalMain = () => {
               const isActive = activeProcess === process.id;
               
               return (
+                <Link
+                  key={process.id}
+                  to={process.path}                 // <-- navega a la ruta del proceso
+                  className="block"                 // mantiene el bloque clickeable
+                  onMouseEnter={() => setActiveProcess(process.id)}
+                  onMouseLeave={() => setActiveProcess(null)}
+                  style={{ animation: `slideInLeft 0.6s ease-out ${index * 0.2}s both` }}
+                >
                 <div
                   key={process.id}
                   className={`
@@ -129,6 +141,7 @@ const MisionalMain = () => {
                     </div>
                   </div>
                 </div>
+                </Link>
               );
             })}
             

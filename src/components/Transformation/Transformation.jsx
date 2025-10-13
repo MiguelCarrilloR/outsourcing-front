@@ -215,7 +215,7 @@ const documents = [
               onChange={(e) => setSelectedSubprocess(e.target.value)}
             >
               <option>Todos los subprocesos</option>
-              <option>Estadística</option>
+              <option>Estagit branch -M maindística</option>
               <option>Centro de Excelencia</option>
                 <option>Planeación</option>
             </select>
