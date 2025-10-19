@@ -7,70 +7,79 @@ export default function StrategicDirectionModule() {
   const [selectedSubprocess, setSelectedSubprocess] = useState('Todos los subprocesos');
   const [uploadedPdf, setUploadedPdf] = useState(null);
 
- const documents = [
-  {
-    id: 1,
-    title: "Procedimiento de Gestión de No Conformidades y Acciones Correctivas/Preventivas (NC/AC/AP)",
-    code: "MC-PR-001",
-    version: "1.0",
-    date: "2025-02-05",
-    subprocess: "Proceso de Mejora Continua",
-    type: "Procedimientos",
-    tag: "PR",
-    color: "bg-red-600"
-  },
-  {
-    id: 2,
-    title: "Procedimiento de Auditorías Internas del SIG",
-    code: "MC-PR-002",
-    version: "1.1",
-    date: "2025-02-20",
-    subprocess: "Proceso de Mejora Continua",
-    type: "Procedimientos",
-    tag: "PR",
-    color: "bg-red-600"
-  },
-  {
-    id: 3,
-    title: "Instructivo para Análisis de Causa Raíz (5 Porqués / Diagrama de Ishikawa)",
-    code: "MC-IN-001",
-    version: "1.0",
-    date: "2025-02-28",
-    subprocess: "Proceso de Mejora Continua",
-    type: "Instructivos de trabajo",
-    tag: "IN",
-    color: "bg-red-600"
-  },
-  {
-    id: 4,
-    title: "Formato de Plan de Mejora y Seguimiento",
-    code: "MC-FO-001",
-    version: "1.0",
-    date: "2025-03-05",
-    subprocess: "Proceso de Mejora Continua",
-    type: "Formatos",
-    tag: "FO",
-    color: "bg-red-600"
-  },
-  {
-    id: 5,
-    title: "Anexo: Tablero de Indicadores de Desempeño y Mejora (KPI)",
-    code: "MC-AN-001",
-    version: "1.0",
-    date: "2025-03-12",
-    subprocess: "Proceso de Mejora Continua",
-    type: "Anexos",
-    tag: "AN",
-    color: "bg-red-600"
-  }
-];
+  const documents = [
+    {
+      id: 1,
+      title: "Procedimiento de Gestión de No Conformidades y Acciones Correctivas/Preventivas (NC/AC/AP)",
+      code: "MC-PR-001",
+      version: "1.0",
+      date: "2025-02-05",
+      subprocess: "Proceso de Mejora Continua",
+      type: "Procedimientos",
+      tag: "PR",
+      color: "bg-red-600"
+    },
+    {
+      id: 2,
+      title: "Procedimiento de Auditorías Internas del SIG",
+      code: "MC-PR-002",
+      version: "1.1",
+      date: "2025-02-20",
+      subprocess: "Proceso de Mejora Continua",
+      type: "Procedimientos",
+      tag: "PR",
+      color: "bg-red-600"
+    },
+    {
+      id: 3,
+      title: "Instructivo para Análisis de Causa Raíz (5 Porqués / Diagrama de Ishikawa)",
+      code: "MC-IN-001",
+      version: "1.0",
+      date: "2025-02-28",
+      subprocess: "Proceso de Mejora Continua",
+      type: "Instructivos de trabajo",
+      tag: "IN",
+      color: "bg-red-600"
+    },
+    {
+      id: 4,
+      title: "Formato de Plan de Mejora y Seguimiento",
+      code: "MC-FO-001",
+      version: "1.0",
+      date: "2025-03-05",
+      subprocess: "Proceso de Mejora Continua",
+      type: "Formatos",
+      tag: "FO",
+      color: "bg-red-600"
+    },
+    {
+      id: 5,
+      title: "Anexo: Tablero de Indicadores de Desempeño y Mejora (KPI)",
+      code: "MC-AN-001",
+      version: "1.0",
+      date: "2025-03-12",
+      subprocess: "Proceso de Mejora Continua",
+      type: "Anexos",
+      tag: "AN",
+      color: "bg-red-600"
+    }
+  ];
+
+  // --- Helpers: decidir si es Formato/Formatos (tolerante a tildes/mayúsculas) ---
+  const normalizar = (txt = '') =>
+    txt.toString().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+  const esFormato = (doc) =>
+    normalizar(doc?.type) === 'formatos' || normalizar(doc?.type) === 'formato';
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         doc.code.toLowerCase().includes(searchTerm.toLowerCase());
+    const term = normalizar(searchTerm);
+    const matchesSearch =
+      normalizar(doc.title).includes(term) || normalizar(doc.code).includes(term);
     const matchesType = selectedType === 'Todos los tipos' || doc.type === selectedType;
-    const matchesSubprocess = selectedSubprocess === 'Todos los subprocesos' || doc.subprocess === selectedSubprocess;
-    
+    const matchesSubprocess =
+      selectedSubprocess === 'Todos los subprocesos' || doc.subprocess === selectedSubprocess;
+
     return matchesSearch && matchesType && matchesSubprocess;
   });
 
@@ -85,8 +94,6 @@ export default function StrategicDirectionModule() {
           Implementación de metodologías de mejoramiento, gestión de no conformidades y acciones correctivas.
         </p>
       </div>
-
-
 
       {/* Process Characterization Section */}
       <div className="mb-8">
@@ -151,6 +158,7 @@ export default function StrategicDirectionModule() {
                   <Eye className="w-4 h-4 mr-2" />
                   Ver PDF
                 </button>
+                {/* El botón de descarga del archivo subido se mantiene */}
                 <button className="flex items-center px-4 py-2 text-green-600 border border-green-300 rounded-lg hover:bg-green-50 transition-colors">
                   <Download className="w-4 h-4 mr-2" />
                   Descargar
@@ -164,7 +172,7 @@ export default function StrategicDirectionModule() {
               </div>
               
               <p className="text-sm text-gray-500">
-                Código: MC-CAR-001 | Versión: 1.0 | Fecha: 2025-03-25 | Subproceso: Mejora ContinuaSeguridad y Salud en el Trabajo (SST)
+                Código: MC-CAR-001 | Versión: 1.0 | Fecha: 2025-03-25 | Subproceso: Mejora Continua
               </p>
             </div>
           )}
@@ -215,6 +223,7 @@ export default function StrategicDirectionModule() {
               onChange={(e) => setSelectedSubprocess(e.target.value)}
             >
               <option>Todos los subprocesos</option>
+              <option>Proceso de Mejora Continua</option>
             </select>
           </div>
         </div>
@@ -231,24 +240,30 @@ export default function StrategicDirectionModule() {
                   
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-2 text-lg">{doc.title}</h3>
-                    <div className="flex items-center space-x-6 text-sm text-gray-600">
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
                       <span>Código: {doc.code}</span>
                       <span>Versión: {doc.version}</span>
                       <span>Fecha: {doc.date}</span>
                       <span>Subproceso: {doc.subprocess}</span>
+                      <span>Tipo: {doc.type}</span>
                     </div>
                   </div>
                 </div>
                 
                 <div className="flex items-center space-x-3">
+                  {/* Ver: siempre */}
                   <button className="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                     <Eye className="w-4 h-4 mr-1" />
                     <span className="text-sm">Ver</span>
                   </button>
-                  <button className="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
-                    <Download className="w-4 h-4 mr-1" />
-                    <span className="text-sm">Descargar</span>
-                  </button>
+
+                  {/* Descargar: solo si es Formato/Formatos */}
+                  {esFormato(doc) ? (
+                    <button className="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+                      <Download className="w-4 h-4 mr-1" />
+                      <span className="text-sm">Descargar</span>
+                    </button>
+                  ) : null}
                 </div>
               </div>
             </div>

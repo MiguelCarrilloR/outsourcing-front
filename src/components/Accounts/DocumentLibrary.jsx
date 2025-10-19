@@ -10,7 +10,7 @@ const DocumentLibrary = () => {
     {
       id: 'famisanar',
       name: 'FAMISANAR EPS',
-      imageUrl: '', // Espacio para imagen
+      imageUrl: '',
       documents: [
         { 
           code: 'FAM-LIN-001',
@@ -33,7 +33,7 @@ const DocumentLibrary = () => {
     {
       id: 'etb',
       name: 'ETB',
-      imageUrl: '', // Espacio para imagen
+      imageUrl: '',
       documents: [
         { 
           code: 'ETB-ALE-001',
@@ -80,7 +80,7 @@ const DocumentLibrary = () => {
     {
       id: 'hdi',
       name: 'HDI SEGUROS',
-      imageUrl: '', // Espacio para imagen
+      imageUrl: '',
       documents: [
         { 
           code: 'HDI-ATE-001',
@@ -95,7 +95,7 @@ const DocumentLibrary = () => {
     {
       id: 'cardif',
       name: 'BNP PARIBAS CARDIF',
-      imageUrl: '', // Espacio para imagen
+      imageUrl: '',
       documents: [
         { 
           code: 'CAR-FAC-001',
@@ -118,7 +118,7 @@ const DocumentLibrary = () => {
     {
       id: 'falabella',
       name: 'BANCO FALABELLA',
-      imageUrl: '', // Espacio para imagen
+      imageUrl: '',
       documents: [
         { 
           code: 'FAL-CAN-001',
@@ -150,29 +150,39 @@ const DocumentLibrary = () => {
 
   const documentTypes = ['all', 'Proceso', 'Procedimiento', 'Manual', 'Política'];
 
+  // --- Helpers: normalizar y validar "Formato(s)" ---
+  const normalizar = (txt = '') =>
+    txt.toString().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+  const esFormato = (type = '') => {
+    const t = normalizar(type);
+    return t === 'formato' || t === 'formatos';
+  };
+
   const getFilteredDocuments = () => {
     let allDocs = [];
     
     companies.forEach(company => {
       const companyMatches = selectedCompany === 'all' || company.id === selectedCompany;
-      
-      if (companyMatches) {
-        company.documents.forEach(doc => {
-          const typeMatches = selectedType === 'all' || doc.type === selectedType;
-          const searchMatches = searchTerm === '' || 
-            doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            doc.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            company.name.toLowerCase().includes(searchTerm.toLowerCase());
-          
-          if (typeMatches && searchMatches) {
-            allDocs.push({
-              ...doc,
-              companyName: company.name,
-              companyId: company.id
-            });
-          }
-        });
-      }
+      if (!companyMatches) return;
+
+      company.documents.forEach(doc => {
+        const typeMatches = selectedType === 'all' || doc.type === selectedType;
+        const term = normalizar(searchTerm);
+        const searchMatches =
+          term === '' ||
+          normalizar(doc.name).includes(term) ||
+          normalizar(doc.code).includes(term) ||
+          normalizar(company.name).includes(term);
+
+        if (typeMatches && searchMatches) {
+          allDocs.push({
+            ...doc,
+            companyName: company.name,
+            companyId: company.id
+          });
+        }
+      });
     });
     
     return allDocs;
@@ -185,7 +195,9 @@ const DocumentLibrary = () => {
       'Proceso': 'bg-blue-600',
       'Procedimiento': 'bg-red-600',
       'Manual': 'bg-purple-600',
-      'Política': 'bg-green-600'
+      'Política': 'bg-green-600',
+      'Formato': 'bg-emerald-600',
+      'Formatos': 'bg-emerald-600',
     };
     return colors[type] || 'bg-gray-600';
   };
@@ -195,7 +207,9 @@ const DocumentLibrary = () => {
       'Proceso': 'PO',
       'Procedimiento': 'PR',
       'Manual': 'MA',
-      'Política': 'PL'
+      'Política': 'PL',
+      'Formato': 'FO',
+      'Formatos': 'FO',
     };
     return abbr[type] || 'DO';
   };
@@ -274,7 +288,6 @@ const DocumentLibrary = () => {
           // Show by company
           companies.map(company => {
             const companyDocs = filteredDocuments.filter(doc => doc.companyId === company.id);
-            
             if (companyDocs.length === 0) return null;
             
             return (
@@ -313,6 +326,7 @@ const DocumentLibrary = () => {
                             <span>Versión: {doc.version}</span>
                             <span>Fecha: {doc.date}</span>
                             <span>Subproceso: {doc.subprocess}</span>
+                            <span>Tipo: {doc.type}</span>
                           </div>
                         </div>
 
@@ -321,10 +335,12 @@ const DocumentLibrary = () => {
                             <Eye className="w-4 h-4" />
                             Ver
                           </button>
-                          <button className="flex items-center gap-1 px-3 py-1.5 text-green-600 hover:bg-green-50 rounded text-sm transition-colors">
-                            <Download className="w-4 h-4" />
-                            Descargar
-                          </button>
+                          {esFormato(doc.type) ? (
+                            <button className="flex items-center gap-1 px-3 py-1.5 text-green-600 hover:bg-green-50 rounded text-sm transition-colors">
+                              <Download className="w-4 h-4" />
+                              Descargar
+                            </button>
+                          ) : null}
                         </div>
                       </div>
                     </div>
@@ -350,6 +366,7 @@ const DocumentLibrary = () => {
                       <span>Versión: {doc.version}</span>
                       <span>Fecha: {doc.date}</span>
                       <span>Subproceso: {doc.subprocess}</span>
+                      <span>Tipo: {doc.type}</span>
                     </div>
                   </div>
 
@@ -358,10 +375,12 @@ const DocumentLibrary = () => {
                       <Eye className="w-4 h-4" />
                       Ver
                     </button>
-                    <button className="flex items-center gap-1 px-3 py-1.5 text-green-600 hover:bg-green-50 rounded text-sm transition-colors">
-                      <Download className="w-4 h-4" />
-                      Descargar
-                    </button>
+                    {esFormato(doc.type) ? (
+                      <button className="flex items-center gap-1 px-3 py-1.5 text-green-600 hover:bg-green-50 rounded text-sm transition-colors">
+                        <Download className="w-4 h-4" />
+                        Descargar
+                      </button>
+                    ) : null}
                   </div>
                 </div>
               </div>

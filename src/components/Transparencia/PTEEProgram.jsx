@@ -517,12 +517,6 @@ Decreto 830 del 2021 donde se modifican y adicionan algunos artículos referente
                     <option>Políticas</option>
                     <option>Formatos</option>
                   </select>
-                  <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 min-w-48">
-                    <option>Todos los subprocesos</option>
-                    <option>Planeación</option>
-                    <option>Estadística</option>
-                    <option>Centro de excelencia</option>
-                  </select>
                 </div>
               </div>
 

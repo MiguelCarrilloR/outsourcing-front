@@ -1,72 +1,34 @@
 import React, { useState } from 'react';
-import { FileText, Map, Settings, BookOpen, Search, Filter, X } from 'lucide-react';
+import { FileText, Map, Settings, BookOpen, Search, X } from 'lucide-react';
 import ProcesosGeneralSection from './sections/ProcesosGeneralSection';
 import MapaProcesosSection from './sections/MapaProcesosSection';
 import ISO9001Section from './sections/ISO9001Section';
 import ISO27001Section from './sections/ISO27001Section';
 
 const Main = () => {
-  const [activeSection, setActiveSection] = useState(0);
+  // ⬇️ Inicia minimizado: ninguna ISO abierta
+  const [activeISOSection, setActiveISOSection] = useState(-1);
+  const [activeProcesosSection, setActiveProcesosSection] = useState(0);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProceso, setSelectedProceso] = useState('');
   const [selectedSubproceso, setSelectedSubproceso] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
-  // Estructura de procesos basada en el mapa
   const procesosData = {
-    'Estratégicos': [
-      'Direccionamiento Estratégico',
-      'Gestión de Innovación'
-    ],
-    'Misionales': [
-      'Gestión Comercial',
-      'Implementación',
-      'Operaciones',
-      'Transformación Digital',
-      'Gestión Humana'
-    ],
-    'Soporte': [
-      'Tecnología',
-      'Gestión Administrativa',
-      'Valoración de la Experiencia',
-      'Mejora Continua',
-      'Mercadeo'
-    ]
+    'Estratégicos': ['Direccionamiento Estratégico', 'Gestión de Innovación'],
+    'Misionales': ['Gestión Comercial', 'Implementación', 'Operaciones', 'Transformación Digital', 'Gestión Humana'],
+    'Soporte': ['Tecnología', 'Gestión Administrativa', 'Valoración de la Experiencia', 'Mejora Continua', 'Mercadeo']
   };
 
-  const sections = [
-    {
-      id: 0,
-      title: "Área de Procesos General",
-      subtitle: "Presentación general del área de procesos",
-      icon: FileText,
-      color: "bg-red-50 from-red-500 to-red-600",
-      component: ProcesosGeneralSection
-    },
-    {
-      id: 1,
-      title: "Mapa de Procesos",
-      subtitle: "Visualización completa del mapa de procesos organizacional",
-      icon: Map,
-      color: "bg-red-50 from-red-500 to-red-600",
-      component: MapaProcesosSection
-    },
-    {
-      id: 2,
-      title: "ISO 9001:2015",
-      subtitle: "ASPECTOS IMPORTANTES DE LA NORMA",
-      icon: Settings,
-      color: "from-red-500 to-pink-600",
-      component: ISO9001Section
-    },
-    {
-      id: 3,
-      title: "ISO/IEC 27001:2022",
-      subtitle: "ASPECTOS IMPORTANTES DE LA NORMA",
-      icon: BookOpen,
-      color: "bg-red-50 from-red-500 to-red-600",
-      component: ISO27001Section
-    }
+  const sectionsISO = [
+    { id: 2, title: "ISO 9001:2015", subtitle: "ASPECTOS IMPORTANTES DE LA NORMA", icon: Settings, color: "from-red-500 to-pink-600", component: ISO9001Section },
+    { id: 3, title: "ISO/IEC 27001:2022", subtitle: "ASPECTOS IMPORTANTES DE LA NORMA", icon: BookOpen, color: "bg-red-50 from-red-500 to-red-600", component: ISO27001Section }
+  ];
+
+  const sectionsProcesos = [
+    { id: 0, title: "Área de Procesos General", subtitle: "Presentación general del área de procesos", icon: FileText, color: "bg-red-50 from-red-500 to-red-600", component: ProcesosGeneralSection },
+    { id: 1, title: "Mapa de Procesos", subtitle: "Visualización completa del mapa de procesos organizacional", icon: Map, color: "bg-red-50 from-red-500 to-red-600", component: MapaProcesosSection }
   ];
 
   const handleClearFilters = () => {
@@ -86,9 +48,51 @@ const Main = () => {
           </p>
         </div>
 
-        {/* Search and Filter Bar */}
+        {/* ====== BLOQUE 1: ISOs (antes de búsqueda) ====== */}
+        <div className="flex flex-wrap justify-center gap-4 mb-6">
+          {sectionsISO.map((section, index) => {
+            const IconComponent = section.icon;
+            const isActive = activeISOSection === index;
+            return (
+              <button
+                key={`iso-tab-${section.id}`}
+                onClick={() => setActiveISOSection(isActive ? -1 : index)} // toggle abrir/cerrar
+                className={`flex items-center space-x-3 px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                  isActive
+                    ? `bg-gradient-to-r ${section.color} text-white shadow-lg`
+                    : 'bg-white text-gray-600 hover:bg-gray-50 shadow-md'
+                }`}
+                aria-expanded={isActive}
+              >
+                <IconComponent className="w-5 h-5" />
+                <span className="hidden md:inline">{section.title}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Panel ISO: solo se muestra si hay uno activo */}
+        <div className={`bg-white rounded-2xl shadow-2xl overflow-hidden mb-8 ${activeISOSection < 0 ? 'hidden' : 'block'}`}>
+          {sectionsISO.map((section, sectionIndex) => {
+            const SectionComponent = section.component;
+            return (
+              <div
+                key={`iso-panel-${section.id}`}
+                className={`${activeISOSection === sectionIndex ? 'block' : 'hidden'}`}
+              >
+                <SectionComponent
+                  section={section}
+                  searchTerm={searchTerm}
+                  selectedProceso={selectedProceso}
+                  selectedSubproceso={selectedSubproceso}
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ====== Barra de Búsqueda y Filtros ====== */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          {/* Search Bar */}
           <div className="relative mb-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
@@ -100,10 +104,6 @@ const Main = () => {
             />
           </div>
 
-         
-          
-
-          {/* Active Filters Display */}
           {(selectedProceso || selectedSubproceso) && !showFilters && (
             <div className="mt-3 flex flex-wrap gap-2">
               {selectedProceso && (
@@ -131,20 +131,28 @@ const Main = () => {
                   </button>
                 </span>
               )}
+              {(selectedProceso || selectedSubproceso) && (
+                <button
+                  onClick={handleClearFilters}
+                  className="inline-flex items-center px-3 py-1 text-sm border rounded-full hover:bg-gray-50"
+                >
+                  Limpiar filtros
+                </button>
+              )}
             </div>
           )}
         </div>
 
-        {/* Section Navigation */}
+        {/* ====== BLOQUE 2: Procesos (después de búsqueda) ====== */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {sections.map((section, index) => {
+          {sectionsProcesos.map((section, index) => {
             const IconComponent = section.icon;
             return (
               <button
-                key={section.id}
-                onClick={() => setActiveSection(index)}
+                key={`proc-tab-${section.id}`}
+                onClick={() => setActiveProcesosSection(index)}
                 className={`flex items-center space-x-3 px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
-                  activeSection === index
+                  activeProcesosSection === index
                     ? `bg-gradient-to-r ${section.color} text-white shadow-lg`
                     : 'bg-white text-gray-600 hover:bg-gray-50 shadow-md'
                 }`}
@@ -156,18 +164,15 @@ const Main = () => {
           })}
         </div>
 
-        {/* Active Section Display */}
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-          {sections.map((section, sectionIndex) => {
+          {sectionsProcesos.map((section, sectionIndex) => {
             const SectionComponent = section.component;
             return (
               <div
-                key={section.id}
-                className={`transition-all duration-500 ${
-                  activeSection === sectionIndex ? 'block' : 'hidden'
-                }`}
+                key={`proc-panel-${section.id}`}
+                className={`${activeProcesosSection === sectionIndex ? 'block' : 'hidden'}`}
               >
-                <SectionComponent 
+                <SectionComponent
                   section={section}
                   searchTerm={searchTerm}
                   selectedProceso={selectedProceso}
@@ -178,7 +183,6 @@ const Main = () => {
           })}
         </div>
 
-        {/* Footer Info */}
         <div className="text-center mt-12">
           <p className="text-gray-600">
             Haga clic en las pestañas superiores para navegar entre las diferentes secciones

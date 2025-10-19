@@ -820,14 +820,7 @@ Consideraciones especiales:
                     <option>Guías</option>
                     <option>Manuales</option>
                   </select>
-                  <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 min-w-48">
-                    <option>Todos los subprocesos</option>
-                    <option>Legal</option>
-                    <option>Protección de Datos</option>
-                    <option>Recursos Humanos</option>
-                    <option>Tecnología</option>
-                    <option>Seguridad</option>
-                  </select>
+                 
                 </div>
               </div>
 

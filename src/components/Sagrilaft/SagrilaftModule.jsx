@@ -427,11 +427,7 @@ Ley 7195 de 2022: Ley que otorga a la Superintendencia de Sociedades mayores fac
                   <option>Todos los tipos</option>
                 </select>
               </div>
-              <div class="flex-1">
-                <select class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
-                  <option>Todos los subprocesos</option>
-                </select>
-              </div>
+              
             </div>
             
             <div class="grid gap-4">
